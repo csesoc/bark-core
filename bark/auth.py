@@ -37,6 +37,18 @@ def login():
             abort(400)
     abort(400)
 
+@bp_auth.route('/logout', methods=['POST'])
+def logout():
+    if request.headers['Content-Type'] == 'application/json':
+        try:
+            s = Session.query.filter_by(auth_token=request.json["auth_token"]).first()
+            if s:
+                db.session.delete(s)
+                db.session.commit()
+            return '{success}'
+        except (ValueError, KeyError, TypeError) as error:
+            abort(400)
+    abort(400)
 
 def get_user_id(auth_token):
     s = Session.query.filter_by(auth_token=auth_token).first()
