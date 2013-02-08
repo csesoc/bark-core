@@ -1,9 +1,13 @@
 from flask import Flask
-app = Flask(__name__)
+import default_settings
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(default_settings)
+    
+    #from auth import bp_auth
+    #from swipe import swipe
 
-if __name__ == '__main__':
-    app.run()
+    #app.register_blueprint(bp_auth)
+    #app.register_blueprint(swipe)
+    return app

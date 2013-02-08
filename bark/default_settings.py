@@ -1,0 +1,3 @@
+# Bark Settings
+
+DEBUG = True
