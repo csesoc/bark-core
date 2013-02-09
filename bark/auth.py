@@ -2,15 +2,13 @@
 
 from datetime import datetime, timedelta
 import os
-import base64
 
 from flask import Blueprint
 
-from bark import db
-import user
+from bark import db, user
 from bark.api import BarkApiEndpoint
 
-bp_auth = Blueprint('bp_auth', __name__)
+bp_auth = Blueprint("bp_auth", __name__)
 
 auth_token_length = 32
 session_timeout = 24
@@ -60,12 +58,12 @@ class LogoutView(BarkApiEndpoint):
 
 bp_auth.add_url_rule(
     "/login",
-    view_func=LoginView.as_view('login'),
+    view_func=LoginView.as_view("login"),
     methods=["POST"])
 
 bp_auth.add_url_rule(
     "/logout",
-    view_func=LogoutView.as_view('logout'),
+    view_func=LogoutView.as_view("logout"),
     methods=["POST"])
 
 def get_user_id(auth_token):
@@ -78,4 +76,3 @@ def get_user_id(auth_token):
             return None 
     else:
         return None
-
