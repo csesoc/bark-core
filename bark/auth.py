@@ -1,5 +1,3 @@
-# vim: expandtab:ts=4:sw=4
-
 from flask import Blueprint
 
 from bark import db, user
