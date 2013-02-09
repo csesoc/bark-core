@@ -32,7 +32,7 @@ class Session(db.Model):
                 return session.user
             else:
                 db.session.delete(session)
-                return None 
+                return None
         else:
             return None
 

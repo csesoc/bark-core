@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from bark import db, create_app
-from bark.models import *
+from bark.auth.models import User
 
 app = create_app()
 

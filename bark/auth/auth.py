@@ -1,10 +1,6 @@
-from flask import Blueprint
-
-from bark import db, user
-from bark.api import BarkApiEndpoint
-from bark.models import Session, User
-
-bp_auth = Blueprint("bp_auth", __name__)
+from bark import db
+from bark.lib.api import BarkApiEndpoint
+from bark.auth.models import Session, User
 
 class LoginView(BarkApiEndpoint):
     required_fields_ = {
@@ -43,13 +39,3 @@ class LogoutView(BarkApiEndpoint):
         return {
             "status": "OK",
         }
-
-bp_auth.add_url_rule(
-    "/login",
-    view_func=LoginView.as_view("login"),
-    methods=["POST"])
-
-bp_auth.add_url_rule(
-    "/logout",
-    view_func=LogoutView.as_view("logout"),
-    methods=["POST"])
