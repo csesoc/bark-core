@@ -1,11 +1,14 @@
+# vim: expandtab:ts=4:sw=4
+
 from datetime import datetime, timedelta
 import os
 import base64
 
-from flask import Blueprint, jsonify, request, abort
+from flask import Blueprint
 
 from bark import db
 import user
+from bark.api import BarkApiEndpoint
 
 bp_auth = Blueprint('bp_auth', __name__)
 
@@ -23,32 +26,47 @@ class Session(db.Model):
         self.create_time = datetime.utcnow()
         self.auth_token = os.urandom(auth_token_length).encode('hex')
 
-@bp_auth.route('/login', methods=['POST'])
-def login():
-    if request.headers['Content-Type'] == 'application/json':
-        try:
-            user_id = user.get_valid(request.json["username"], request.json["password"])
-            if user_id:
-                s = Session(user_id)
-                db.session.add(s)
-                db.session.commit()
-                return jsonify(auth_token=s.auth_token)
-        except (ValueError, KeyError, TypeError) as error:
-            abort(400)
-    abort(400)
+class LoginView(BarkApiEndpoint):
+    required_fields_ = {
+        "post": ["username", "password"],
+    }
 
-@bp_auth.route('/logout', methods=['POST'])
-def logout():
-    if request.headers['Content-Type'] == 'application/json':
-        try:
-            s = Session.query.filter_by(auth_token=request.json["auth_token"]).first()
-            if s:
-                db.session.delete(s)
-                db.session.commit()
-            return '{success}'
-        except (ValueError, KeyError, TypeError) as error:
-            abort(400)
-    abort(400)
+    def post(self, json):
+        user_id = user.get_valid(json["username"], json["password"])
+        if user_id:
+            s = Session(user_id)
+            db.session.add(s)
+            db.session.commit()
+
+            return {
+                "status": "OK",
+                "auth_token": s.auth_token,
+            }
+
+class LogoutView(BarkApiEndpoint):
+    required_fields_ = {
+        "post": ["auth_token"],
+    }
+
+    def post(self, json):
+        s = Session.query.filter_by(auth_token=json["auth_token"]).first()
+        if s:
+            db.session.delete(s)
+            db.session.commit()
+
+        return {
+            "status": "OK",
+        }
+
+bp_auth.add_url_rule(
+    "/login",
+    view_func=LoginView.as_view('login'),
+    methods=["POST"])
+
+bp_auth.add_url_rule(
+    "/logout",
+    view_func=LogoutView.as_view('logout'),
+    methods=["POST"])
 
 def get_user_id(auth_token):
     s = Session.query.filter_by(auth_token=auth_token).first()
