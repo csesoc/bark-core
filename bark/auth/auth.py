@@ -1,12 +1,6 @@
-# vim: expandtab:ts=4:sw=4
-
-from flask import Blueprint
-
-from bark import db, user
-from bark.api import BarkApiEndpoint
-from bark.models import Session
-
-bp_auth = Blueprint("bp_auth", __name__)
+from bark import db
+from bark.lib.api import BarkApiEndpoint
+from bark.auth.models import Session, User
 
 class LoginView(BarkApiEndpoint):
     required_fields_ = {
@@ -14,15 +8,21 @@ class LoginView(BarkApiEndpoint):
     }
 
     def post(self, json):
-        user_id = user.get_valid(json["username"], json["password"])
-        if user_id:
-            s = Session(user_id)
+        user = User.authenticate(json["username"], json["password"])
+
+        if user is not None:
+            s = Session(user)
             db.session.add(s)
             db.session.commit()
 
             return {
                 "status": "OK",
                 "auth_token": s.auth_token,
+            }
+        else:
+            return {
+                "status": "REQUEST_DENIED",
+                "error_detail:": "Invalid credentials",
             }
 
 class LogoutView(BarkApiEndpoint):
@@ -39,13 +39,3 @@ class LogoutView(BarkApiEndpoint):
         return {
             "status": "OK",
         }
-
-bp_auth.add_url_rule(
-    "/login",
-    view_func=LoginView.as_view("login"),
-    methods=["POST"])
-
-bp_auth.add_url_rule(
-    "/logout",
-    view_func=LogoutView.as_view("logout"),
-    methods=["POST"])

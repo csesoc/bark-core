@@ -1,5 +1,3 @@
-# vim: expandtab:ts=4:sw=4
-
 import sys, traceback
 
 from flask import abort, jsonify, request
