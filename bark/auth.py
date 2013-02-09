@@ -2,7 +2,7 @@ from flask import Blueprint
 
 from bark import db, user
 from bark.api import BarkApiEndpoint
-from bark.models import Session
+from bark.models import Session, User
 
 bp_auth = Blueprint("bp_auth", __name__)
 
@@ -12,15 +12,21 @@ class LoginView(BarkApiEndpoint):
     }
 
     def post(self, json):
-        user_id = user.get_valid(json["username"], json["password"])
-        if user_id:
-            s = Session(user_id)
+        user = User.authenticate(json["username"], json["password"])
+
+        if user is not None:
+            s = Session(user)
             db.session.add(s)
             db.session.commit()
 
             return {
                 "status": "OK",
                 "auth_token": s.auth_token,
+            }
+        else:
+            return {
+                "status": "REQUEST_DENIED",
+                "error_detail:": "Invalid credentials",
             }
 
 class LogoutView(BarkApiEndpoint):
