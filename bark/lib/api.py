@@ -18,18 +18,8 @@ class BarkApiEndpoint(View):
         method = request.method.lower()
 
         # Verify that correct fields are present, and of the correct type
-
-        parsed_json={}
-
         data_types = self.required_fields_.get(method, {})
-        for data_type in data_types:
-            for field in data_types[data_type]:
-                if field not in request.json:
-                    self.bad_request("Missing required field '%s'" % field)
-                try:
-                    parsed_json[field] = data_type(request.json[field])
-                except ValueError:
-                    self.bad_request("Invalid field '%s'" % field)
+        parsed_json = parse_fields(request.json, data_types)
 
         try:
             response = getattr(self, method)(parsed_json)
@@ -41,3 +31,17 @@ class BarkApiEndpoint(View):
             }
 
         return jsonify(response)
+
+def parse_fields(json, field_types):
+    parsed_json={}
+
+    for data_type in field_types:
+        for field in field_types[data_type]:
+            if field not in json:
+                self.bad_request("Missing required field '%s'" % field)
+            try:
+                parsed_json[field] = data_type(request.json[field])
+            except ValueError:
+                self.bad_request("Invalid field '%s'" % field)
+
+    return parsed_json
