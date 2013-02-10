@@ -17,5 +17,6 @@ class CreateEventView(BarkApiEndpoint):
         group = Group.by_id(json["group_id"])
 
         if user in group.members:
-            event = Event(
-        
+            try:
+                start_time = int(json["start_time"])
+                end_time = int(json["end_time"])
