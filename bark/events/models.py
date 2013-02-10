@@ -3,7 +3,7 @@ from bark import db
 class Event(db.Model):
     __tablename__ = "events"
 
-    event_id = db.Column(db.Integer, primary_key=True, auto_increment=True)
+    event_id = db.Column(db.Integer, primary_key=True)
 
     group = db.relationship("Group")
     group_id = db.Column(db.Integer, db.ForeignKey("groups.id"))

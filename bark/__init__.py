@@ -24,6 +24,7 @@ def create_app():
 
     # Component imports. Must be here to fix cyclical problems
     from auth import bp_auth
+    from events import bp_events
     app.register_blueprint(bp_auth)
 
     db.init_app(app)
