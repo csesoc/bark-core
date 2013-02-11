@@ -22,12 +22,10 @@ class BarkApiEndpoint(View):
 
         method = request.method.lower()
 
-        # Verify that correct fields are present, and of the correct type
-        data_types = self.required_fields_.get(method, {})
-        parsed_json = self.parse_fields(request.json, data_types)
+        self.verify_json(request.json, self.required_fields_[method])
 
         try:
-            response = getattr(self, method)(parsed_json)
+            response = getattr(self, method)(request.json)
         except:
             logger_.exception("Uncaught exception in API handler %r" % method)
 
@@ -38,16 +36,21 @@ class BarkApiEndpoint(View):
 
         return jsonify(response)
 
-    def parse_fields(self, json, field_types):
-        parsed_json={}
+    def verify_json(self, json, spec):
+        """
+        Verify JSON against the spec provided.
 
-        for data_type in field_types:
-            for field in field_types[data_type]:
-                if field not in json:
-                    self.bad_request("Missing required field '%s'" % field)
-                try:
-                    parsed_json[field] = data_type(request.json[field])
-                except ValueError:
-                    self.bad_request("Invalid field '%s'" % field)
+        Spec format is a list of tuples:
+            (field_name, field_type)
+        Each tuple must match the fields in JSON to be conforming to the spec.
+        Extra fields in JSON are left unmodified.
 
-        return parsed_json
+        Calls out to self.bad_request() if JSON is non-conforming.
+        """
+
+        for field, field_type in spec:
+            if field not in json:
+                self.bad_request("Missing field %r" % field)
+
+            if type(json[field]) != field_type:
+                self.bad_request("Non-conformant field %r" % field)

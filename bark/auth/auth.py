@@ -4,7 +4,10 @@ from bark.auth.models import Session, User
 
 class LoginView(BarkApiEndpoint):
     required_fields_ = {
-        "post": {str: ["username", "password"]},
+        "post": [
+            ("username", str),
+            ("password", str),
+        ],
     }
 
     def post(self, json):
@@ -27,7 +30,9 @@ class LoginView(BarkApiEndpoint):
 
 class LogoutView(BarkApiEndpoint):
     required_fields_ = {
-        "post": ["auth_token"],
+        "post": [
+            ("auth_token", str),
+        ],
     }
 
     def post(self, json):
