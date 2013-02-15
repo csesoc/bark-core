@@ -22,13 +22,13 @@ class Session(db.Model):
         self.auth_token = os.urandom(auth_token_length).encode("hex")
 
     def is_expired(self):
-        return s.create_time + timedelta(hours=session_timeout) < datetime.utcnow()
+        return self.create_time + timedelta(hours=session_timeout) < datetime.utcnow()
 
     @classmethod
     def get_user(cls, auth_token):
         session = cls.query.filter_by(auth_token=auth_token).first()
         if session:
-            if not session.is_expired:
+            if not session.is_expired():
                 return session.user
             else:
                 db.session.delete(session)
