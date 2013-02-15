@@ -14,7 +14,7 @@ class BarkApiException(Exception):
     Override status() in concrete subclasses.
     """
 
-    def status(self):
+    def status(self):  # pragma: no cover
         raise NotImplemented()
 
     def error_detail(self):
