@@ -25,7 +25,7 @@ class LoginView(BarkApiEndpoint):
         else:
             return {
                 "status": "REQUEST_DENIED",
-                "error_detail:": "Invalid credentials",
+                "error_detail": "Invalid credentials",
             }
 
 class LogoutView(BarkApiEndpoint):
