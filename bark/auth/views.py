@@ -2,6 +2,8 @@ from bark import db
 from bark.lib.api import BarkApiEndpoint
 from bark.auth.models import Session, User
 
+from .shared import BarkAuthenticatedApiEndpoint
+
 class LoginView(BarkApiEndpoint):
     required_fields_ = {
         "post": [
@@ -44,3 +46,13 @@ class LogoutView(BarkApiEndpoint):
         return {
             "status": "OK",
         }
+
+class AuthenticationTestingView(BarkAuthenticatedApiEndpoint):
+    """
+    Just a class for testing API authentication. Thus, no-op by design.
+    """
+
+    required_fields_ = { "post": [] }
+
+    def post(self, json):
+        return { "status": "OK" }

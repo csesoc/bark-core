@@ -5,7 +5,11 @@ Unit tests for the auth module.
 import bark
 import json, unittest
 
-class BarkAuthApiTests(unittest.TestCase):
+class BarkTestCase(unittest.TestCase):
+    """
+    Base class for all bark unit tests.
+    """
+
     def setUp(self):
         self.app = bark.create_app().test_client()
 
@@ -18,6 +22,7 @@ class BarkAuthApiTests(unittest.TestCase):
     def post_json(self, url, **kwargs):
         return json.loads(self.post(url, **kwargs).data)
 
+class BarkAuthApiTests(BarkTestCase):
     def test_nonjson_request(self):
         data = json.loads(self.app.post('/login', data='{}').data)
         self.assertEqual(data['status'], 'BAD_REQUEST')
@@ -70,6 +75,29 @@ class BarkAuthApiTests(unittest.TestCase):
         data = self.post_json('/login', username='test', password=123)
         self.assertEquals(data['status'], 'BAD_REQUEST')
         self.assertTrue('password' in data['error_detail'])
+
+class BarkAuthSharedTests(BarkTestCase):
+    def test_authentication_required(self):
+        data = self.post_json('/login', username='test', password='aaa')
+        self.assertEquals(data['status'], 'OK')
+        self.assertTrue('auth_token' in data)
+
+        token = data['auth_token']
+
+        data = self.post_json('/test-api-auth')
+        self.assertEquals(data['status'], 'BAD_REQUEST')
+        self.assertTrue('auth_token' in data['error_detail'])
+
+        data = self.post_json('/test-api-auth', auth_token='')
+        self.assertEquals(data['status'], 'UNAUTHORISED')
+        self.assertTrue('auth_token' in data['error_detail'])
+
+        data = self.post_json('/test-api-auth', auth_token='a'*64)
+        self.assertEquals(data['status'], 'UNAUTHORISED')
+        self.assertTrue('auth_token' in data['error_detail'])
+
+        data = self.post_json('/test-api-auth', auth_token=token)
+        self.assertEquals(data['status'], 'OK')
 
 if __name__ == '__main__':
     unittest.main()
