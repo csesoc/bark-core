@@ -30,13 +30,6 @@ class VerificationException(BarkApiException):
     def status(self): return "BAD_REQUEST"
 
 class BarkApiEndpoint(View):
-    def bad_request(self, error):
-        # Ignoring the error for now.
-        logger_.warning("Bad request: %s", error)
-
-        abort(400)
-        raise Exception("wtf")  # Never reached.
-
     def dispatch_request(self):
         """
         Dispatches incoming request.
