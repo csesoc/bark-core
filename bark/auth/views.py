@@ -1,7 +1,8 @@
 from bark import db
 from bark.lib.api import BarkApiEndpoint
-from bark.auth.models import Session, User
+from bark.users import User
 
+from .models import Session
 from .shared import BarkAuthenticatedApiEndpoint
 
 class LoginView(BarkApiEndpoint):
