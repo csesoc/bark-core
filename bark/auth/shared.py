@@ -4,7 +4,7 @@ from bark.lib.api import BarkApiEndpoint, BarkApiException
 from .models import Session
 
 auth_spec = [
-    ("auth_token", str),
+    ("auth_token", unicode),
 ]
 
 class AuthenticationException(BarkApiException):
