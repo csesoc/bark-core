@@ -19,3 +19,6 @@ class Group:
                              backref='owned_groups')
     members = db.relationship("Student", secondary=group_members,
                               backref='group_memberships')
+
+    name = db.Column(db.Text, unique=True)
+    description = db.Column(db.Text)
