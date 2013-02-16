@@ -3,7 +3,6 @@ import argparse
 
 from bark import db, create_app
 from bark.users.models import User
-from bark.students.models import Student
 
 parser = argparse.ArgumentParser(description="Make changes to the Bark DB")
 parser.add_argument("-d", "--drop", help="Drop tables before creation", action="store_true")
