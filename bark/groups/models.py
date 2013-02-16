@@ -10,7 +10,7 @@ group_members = db.Table('group_members',
     db.Column('student_id', db.Integer, db.ForeignKey('students.id'))
 )
 
-class Group:
+class Group(db.Model):
     __tablename__ = "groups"
     
     id = db.Column(db.Integer, primary_key = True)
@@ -23,7 +23,7 @@ class Group:
     name = db.Column(db.Text, unique=True)
     description = db.Column(db.Text)
 
-    def __init__(self, name, owner, description=""):
+    def __init__(self, name, owners, description=""):
         self.name = name
-        self.owners.append(owner)
+        self.owners = owners
         self.description = description
