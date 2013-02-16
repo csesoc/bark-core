@@ -59,7 +59,7 @@ class EventView(BarkAuthenticatedApiEndpoint):
     def delete(self, json):
         event = Event.query.get(event_id)
         if event:
-            group = Group.by_id(e.group_id)
+            group = Group.by_id(event.group_id)
             if user in group.owners:
                 db.session.delete(event)
                 db.session.commit()
