@@ -7,8 +7,8 @@ from .shared import BarkAuthenticatedApiEndpoint
 class LoginView(BarkApiEndpoint):
     required_fields_ = {
         "post": [
-            ("username", str),
-            ("password", str),
+            ("username", unicode),
+            ("password", unicode),
         ],
     }
 
@@ -33,7 +33,7 @@ class LoginView(BarkApiEndpoint):
 class LogoutView(BarkApiEndpoint):
     required_fields_ = {
         "post": [
-            ("auth_token", str),
+            ("auth_token", unicode),
         ],
     }
 
