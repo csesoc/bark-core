@@ -45,7 +45,7 @@ class EventView(BarkAuthenticatedApiEndpoint):
     # user is supplied by AuthenticatedApiEndpoint
 
     def get(self, json):
-        event = event.query.get(event_id)
+        event = Event.query.get(event_id)
         if event is not None:
             group = Group.by_id(event.group_id)
             if user in group.members:
