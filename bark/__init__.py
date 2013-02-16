@@ -29,6 +29,9 @@ def create_app():
     from swipe import bp_swipe
     app.register_blueprint(bp_swipe, url_prefix='/swipe')
 
+    from events import bp_events
+    app.register_blueprint(bp_swipe, url_prefix='/events/')
+
     db.init_app(app)
 
     return app
