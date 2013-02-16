@@ -7,8 +7,8 @@ from bark.auth.shared import BarkAuthenticatedApiEndpoint
 class EventCreateView(BarkAuthenticatedApiEndpoint):
     required_fields_ = {
         "post": [
-            ("description", str),
-            ("name",        str),
+            ("description", unicode),
+            ("name",        unicode),
             ("start_time",  int), 
             ("end_time",    int),
             ("group_id",    int),
@@ -45,11 +45,11 @@ class EventView(BarkAuthenticatedApiEndpoint):
     # user is supplied by AuthenticatedApiEndpoint
 
     def get(self, json):
-        event = jsonify(Event.query.filter_by(event_id=event_id))
-        if event:
-            group = Group.by_id(e.group_id)
+        event = event.query.get(event_id)
+        if event is not None:
+            group = Group.by_id(event.group_id)
             if user in group.members:
-                return jsonify(e) 
+                return jsonify(event) 
 
         return {
             "status": "RESOURCE_ERROR",
