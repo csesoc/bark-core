@@ -1,0 +1,75 @@
+from flask import jsonify
+
+from bark import db
+from bark.events.models import Event
+from bark.groups.models import Group
+from bark.auth.shared import BarkAuthenticatedApiEndpoint
+
+class CreateEventView(BarkAuthenticatedApiEndpoint):
+    required_fields_ = {
+        "post": [
+            ("description", str),
+            ("name",        str),
+            ("start_time",  int), 
+            ("end_time",    int),
+            ("group_id",    int),
+        ],
+    }
+
+    def post(self, json):
+        # User set by AuthenticatedApiEndpoint
+        group_id = json["group_id"]
+        group = Group.by_id(group_id)
+
+        if user in group.members:
+            name = json["name"]
+            description = json["name"]
+            start_time = json["start_time"]
+            end_time = json["end_time"]
+
+            event = Event(group_id, name, description, start_time, end_time)
+            db.session.add(event)
+            db.session.commit()
+
+            return {
+                "status": "OK",
+                "event_id": event.event_id,
+            }
+        else:
+            return {
+                "status": "REQUEST_DENIED",
+                "error_detail": "User not member of group",
+            }
+            
+class EventView(BarkAuthenticatedApiEndpoint):
+    # event_id is global by url rules
+    # user is supplied by AuthenticatedApiEndpoint
+
+    def get(self, json):
+        event = jsonify(Event.query.filter_by(event_id=event_id))
+        if event:
+            group = Group.by_id(e.group_id)
+            if user in group.members:
+                return jsonify(e) 
+
+        return {
+            "status": "RESOURCE_ERROR",
+            "error": "The requested event could not be found",
+        }
+        
+    def delete(self, json):
+        event = jsonify(Event.query.filter_by(event_id=event_id))
+        if event:
+            group = Group.by_id(e.group_id)
+            if user in group.owners:
+                db.session.delete(event)
+                db.session.commit()
+
+                return {
+                    "status": "OK",
+                }
+
+        return {
+            "status": "RESOURCE_ERROR",
+            "error": "The requested event could not be found",
+        }
