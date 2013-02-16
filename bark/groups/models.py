@@ -1,8 +1,8 @@
 from bark import db
 
 group_owners = db.Table('group_owners',
-    db.Column('group_id', db.Integer, db.ForeignKey('groups.id')),
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id'))
+    db.Column('group_id', db.Integer, db.ForeignKey('groups.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'))
 )
 
 group_members = db.Table('group_members',
