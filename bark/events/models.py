@@ -1,12 +1,17 @@
 from bark import db
 
+# Another stub. You know the drill...
+class Group(db.Model):
+    __tablename__ = "groups"
+    id = db.Column(db.Integer, primary_key=True)
+
 class Event(db.Model):
     __tablename__ = "events"
 
-    event_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
 
     group = db.relationship("Group")
-    group_id = db.Column(db.Integer, db.ForeignKey("groups.group_id"))
+    group_id = db.Column(db.Integer, db.ForeignKey("groups.id"))
 
     name = db.Column(db.Text)
     description = db.Column(db.Text)

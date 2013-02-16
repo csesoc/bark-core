@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-from .events import *
+from .views import *
 
 bp_events = Blueprint("bp_events", __name__)
 

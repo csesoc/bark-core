@@ -1,11 +1,10 @@
 from flask import jsonify
 
 from bark import db
-from bark.events.models import Event
-from bark.groups.models import Group
+from .models import Event
 from bark.auth.shared import BarkAuthenticatedApiEndpoint
 
-class CreateEventView(BarkAuthenticatedApiEndpoint):
+class EventCreateView(BarkAuthenticatedApiEndpoint):
     required_fields_ = {
         "post": [
             ("description", str),
