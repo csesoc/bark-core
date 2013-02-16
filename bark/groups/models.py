@@ -22,3 +22,8 @@ class Group:
 
     name = db.Column(db.Text, unique=True)
     description = db.Column(db.Text)
+
+    def __init__(self, name, owner, description=""):
+        self.name = name
+        self.owners.append(owner)
+        self.description = description
