@@ -2,6 +2,8 @@
 Unit tests for the swipe module.
 """
 
+import unittest
+
 from bark.lib.tests import BarkTestCase
 
 class BarkSwipeCreationTests(BarkTestCase):

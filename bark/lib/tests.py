@@ -1,8 +1,7 @@
 """
 Base class for all Bark unit tests.
 """
-import unittest
-import json
+import json, unittest
 
 import bark
 
