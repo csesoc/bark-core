@@ -3,7 +3,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import default_exceptions
 from werkzeug.exceptions import HTTPException
 
-import default_settings
+import bark.config
 
 db = SQLAlchemy()
 
@@ -17,7 +17,7 @@ def make_json_error(ex):
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(default_settings)
+    app.config.from_object(bark.config)
 
     for code in default_exceptions.iterkeys():
         app.error_handler_spec[None][code] = make_json_error
