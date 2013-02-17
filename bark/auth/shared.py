@@ -25,4 +25,4 @@ class BarkAuthenticatedApiEndpoint(BarkApiEndpoint):
         if self.user is None:
             raise AuthenticationException("Invalid auth_token")
 
-        return super(BarkAuthenticatedApiEndpoint, self).verify_request(request)
+        super(BarkAuthenticatedApiEndpoint, self).verify_request(request)
