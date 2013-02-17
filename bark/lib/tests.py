@@ -22,3 +22,9 @@ class BarkTestCase(unittest.TestCase):
 
     def post_json(self, url, **kwargs):
         return json.loads(self.post(url, **kwargs).data)
+
+    def auth_post(self, url, **kwargs):
+        assert self.token is not None, 'Must authenticate and set self.token'
+        kwargs['auth_token'] = self.token
+
+        return self.post_json(url, **kwargs)
