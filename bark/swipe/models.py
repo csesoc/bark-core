@@ -1,10 +1,5 @@
 from bark import db
 
-# STUB, REMOVE
-class Event(db.Model):
-    __tablename__ = 'events'
-    id = db.Column(db.Integer, primary_key=True)
-
 class Swipe(db.Model):
     __tablename__ = 'swipes'
 
