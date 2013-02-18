@@ -1,7 +1,7 @@
 """
 Unit tests for the auth module.
 """
-import json
+import json, unittest
 
 import bark
 import bark.lib
