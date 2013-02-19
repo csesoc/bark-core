@@ -9,15 +9,6 @@ import bark.lib
 from bark.lib.tests import BarkTestCase
 
 class BarkAuthApiTests(BarkTestCase):
-    def test_nonjson_request(self):
-        data = json.loads(self.app.post('/login', data='{}').data)
-        self.assertEqual(data['status'], 'BAD_REQUEST')
-        self.assertTrue('JSON' in data['error_detail'])
-
-    def test_frontpage_not_found(self):
-        rv = self.app.get('/')
-        self.assertEqual(rv.status_code, 404)
-
     def test_login_wrong_username(self):
         data = self.post_json('/login', username='wrong', password='aaa')
         self.assertEquals(data['status'], 'REQUEST_DENIED')

@@ -53,7 +53,19 @@ class BarkApiEndpoint(View):
                 "error_detail": "Uncaught exception",
             }
 
-        return jsonify(response)
+        response = jsonify(response)
+
+        # Check if we need JSONP.
+        try:
+            callback = request.args.get('callback', None)
+            if callback is not None:
+                response = '%s(%s)' % (unicode(callback), response.data)
+        except:
+            # Something has gone wrong. Probably request.json is None.
+            # Ignore it, return response, which should remain unmodified.
+            pass
+
+        return response
 
     def verify_request(self, request):
         """
