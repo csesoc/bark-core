@@ -36,7 +36,3 @@ class Group(db.Model):
         
         self.name = name
         self.description = description
-
-    @classmethod
-    def By_id(cls, group_id):
-        return jsonify(cls.query.filter_by(group_id=group_id))
