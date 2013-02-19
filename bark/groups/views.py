@@ -11,28 +11,20 @@ class CreateGroupView(BarkAuthenticatedApiEndpoint):
             ("description", str),
        ]
     }
+ 
     def post(self, json):
-        name = jsonify["name"]
-        g = jsonify(Group.query.filter_by(name=name))
-        if not g:
-            #Assume that the person creating the group is an owner
-            group = Group(name, description)
-            group.add_member(self.user)
-            group.add_owner(self.user)
+        group = Group(json['name'], json['description'])
+        group.add_owner(self.user)  # Owners are separate from members, for now.
+        group.add_member(self.user)
+        try:
             db.session.add(group)
             db.session.commit()
+        except db.IntegrityError:
+            return {request denied}
 
-            return {
-                "status": "OK",
-                "group_id": group_id,
-            }
-        else:
-            return {
-                "status": "REQUEST_DENIED",
-                "error_detail": "A group with that name already exists",
-            }
+        return {ok, group.id}
 
-class GroupView(BarkAuthenticatedApiEndpoint):
+classGroupView(BarkAuthenticatedApiEndpoint):
     def get(self, json):
         group = Group.query.get(json['group_id'])
         if group:
