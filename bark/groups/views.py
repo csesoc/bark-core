@@ -43,17 +43,17 @@ class GroupView(BarkApiEndpoint):
         ]    
     }
     def get(self, json):
-        g = jsonify(Group.query.filter_by(group_id=group_id))
-        if g:
-            return jsonify(g)
+        group = jsonify(Group.query.filter_by(group_id=group_id))
+        if group:
+            return jsonify(group)
         else:
             return {
                 "status": "RESOURCE_ERROR"
                 "error": "Group does not exist"
             }
     def delete(self, json):
-        g = jsonify(Group.query.filter_by(group_id=group_id))
-        if g:
+        group = jsonify(Group.query.filter_by(group_id=group_id))
+        if group:
             if Session.get_user(auth_token) in group.owners:
                 db.session.delete(g)
                 db.session.commit()
