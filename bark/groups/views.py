@@ -20,11 +20,17 @@ class CreateGroupView(BarkAuthenticatedApiEndpoint):
             db.session.add(group)
             db.session.commit()
         except db.IntegrityError:
-            return {request denied}
+            return {
+                "status": "REQUEST_DENIED",
+                "error": "A group with that name already exists",
+                }
 
-        return {ok, group.id}
+        return {
+            "status": "ok", 
+            "group id": "group.id",
+            }
 
-classGroupView(BarkAuthenticatedApiEndpoint):
+class GroupView(BarkAuthenticatedApiEndpoint):
     def get(self, json):
         group = Group.query.get(json['group_id'])
         if group:
