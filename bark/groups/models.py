@@ -1,29 +1,32 @@
 from bark import db
+from flask import jsonify
+from bark.users.models import User
 
-group_owners = db.Table('group_owners',
-    db.Column('group_id', db.Integer, db.ForeignKey('groups.id')),
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id'))
+group_members_associations = db.Table('group_members_associations',
+    db.Column('group_id', db.Integer, db.ForeignKey('users.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('groups.id'))
 )
 
-group_members = db.Table('group_members',
-    db.Column('group_id', db.Integer, db.ForeignKey('groups.id')),
-    db.Column('student_id', db.Integer, db.ForeignKey('students.id'))
+group_owners_associations = db.Table('group_owners_associations',
+    db.Column('group_id', db.Integer, db.ForeignKey('users.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('groups.id'))
 )
 
 class Group(db.Model):
     __tablename__ = "groups"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, unique=True)
+    description = db.Column(db.String)
+    members = db.relationship("User", secondary=group_members_associations)
+    owners = db.relationship("User", secondary=group_owners_associations)
     
-    id = db.Column(db.Integer, primary_key = True)
-
-    owners = db.relationship("User", secondary=group_owners,
-                             backref='owned_groups')
-    members = db.relationship("Student", secondary=group_members,
-                              backref='group_memberships')
-
-    name = db.Column(db.Text, unique=True)
-    description = db.Column(db.Text)
-
-    def __init__(self, name, owners, description=""):
+    def __init__(self, name, description):
         self.name = name
-        self.owners = owners
         self.description = description
+        
+    def add_member(self, user):
+        self.owners.append(user)
+
+    def add_owner(self, user):
+        self.owners.append(user)
