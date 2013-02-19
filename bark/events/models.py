@@ -1,4 +1,6 @@
 from bark import db
+from bark.groups.models import Group
+from bark.students.models import Student
 
 class Event(db.Model):
     __tablename__ = "events"
