@@ -7,4 +7,5 @@ LIB_DIR="$( cd "$( pwd )/../lib" && pwd )"
 
 coverage run --source=bark bark/auth/tests.py
 coverage run --source=bark --append bark/swipe/tests.py
+coverage run --source=bark --append bark/lib/lib_tests.py
 coverage html
