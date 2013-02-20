@@ -22,7 +22,7 @@ class EventCreateView(BarkAuthenticatedApiEndpoint):
 
         if user in group.members:
             name = json["name"]
-            description = json["name"]
+            description = json["description"]
             start_time = json["start_time"]
             end_time = json["end_time"]
 

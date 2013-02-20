@@ -6,7 +6,6 @@ from bark.groups.models import Group
 class CreateGroupView(BarkAuthenticatedApiEndpoint):
     required_fields = {
        "post": [
-            ("group_id", int),
             ("name", str),
             ("description", str),
        ]
@@ -30,7 +29,7 @@ class CreateGroupView(BarkAuthenticatedApiEndpoint):
 
 class GroupView(BarkAuthenticatedApiEndpoint):
     def get(self, json):
-        group = Group.query.get(json['group_id'])
+        group = Group.query.get(group_id)
         if group:
             return jsonify(group)
         else:
@@ -39,7 +38,7 @@ class GroupView(BarkAuthenticatedApiEndpoint):
                 "error": "Group does not exist",
             }
     def delete(self, json):
-        group = Group.query.get(json['group_id'])
+        group = Group.query.get(group_id)
         if group:
             if self.user in group.owners:
                 db.session.delete(g)
