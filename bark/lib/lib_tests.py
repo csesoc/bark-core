@@ -19,8 +19,7 @@ class BarkLibApiTests(BarkTestCase):
     def test_jsonp_compliance(self):
         data = self.post(
             '/login?callback=cb314',
-            username='test',
-            password='aaa').data
+            data=json.dumps(dict(username='test', password='aaa'))).data
         self.assertTrue(data.startswith('cb314'))
 
 if __name__ == '__main__':

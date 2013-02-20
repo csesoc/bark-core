@@ -75,10 +75,11 @@ class BarkApiEndpoint(View):
         May modify self.*, e.g. unpacking request data.
         """
 
-        if request.json is None:
-            raise VerificationException("Request is not a JSON request")
+        if (request.method == 'POST' or request.method == 'PUT'):
+            if request.json is None:
+                raise VerificationException("Request is not a JSON request")
 
-        self.verify_json(request.json, self.required_fields_[self.method])
+            self.verify_json(request.json, self.required_fields_[self.method])
 
     def verify_json(self, json, spec):
         """
