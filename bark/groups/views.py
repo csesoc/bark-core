@@ -13,9 +13,7 @@ class CreateGroupView(BarkAuthenticatedApiEndpoint):
     }
  
     def post(self, json):
-        group = Group(json['name'], json['description'])
-        group.add_owner(self.user)  # Owners are separate from members, for now.
-        group.add_member(self.user)
+        group = Group(json['name'], self.user, description=json['description'])
         try:
             db.session.add(group)
             db.session.commit()
