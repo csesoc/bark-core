@@ -53,7 +53,10 @@ class AuthenticationTestingView(BarkAuthenticatedApiEndpoint):
     Just a class for testing API authentication. Thus, no-op by design.
     """
 
-    required_fields_ = { "post": [] }
+    required_fields_ = { "post": [], "get": [] }
 
     def post(self, json):
+        return { "status": "OK" }
+
+    def get(self, request):
         return { "status": "OK" }
