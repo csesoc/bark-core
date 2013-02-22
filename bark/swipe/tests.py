@@ -20,11 +20,10 @@ class BarkSwipeCreationTests(BarkTestCase):
             timestamp='2013-02-17T12:00:00+11:00',
             uid='uid')
 
-        self.assertEquals(data['status'], 'BAD_REQUEST')
-        self.assertTrue('auth_token' in data['error_detail'])
+        self.assertEquals(data['status'], 'UNAUTHORISED')
 
     def test_simple(self):
-        data = self.auth_post(
+        data = self.auth_post_json(
             '/swipe/',
             device='device',
             event_id=1,
@@ -34,7 +33,7 @@ class BarkSwipeCreationTests(BarkTestCase):
         self.assertEquals(data['status'], 'OK')
 
     def test_bad_timestamp(self):
-        data = self.auth_post(
+        data = self.auth_post_json(
             '/swipe/',
             device='device',
             event_id=1,

@@ -62,7 +62,7 @@ class BarkAuthSharedTests(BarkTestCase):
         token = data['auth_token']
 
         data = self.post_json('/test-api-auth')
-        self.assertEquals(data['status'], 'BAD_REQUEST')
+        self.assertEquals(data['status'], 'UNAUTHORISED')
         self.assertTrue('auth_token' in data['error_detail'])
 
         data = self.post_json('/test-api-auth', auth_token='')
@@ -74,6 +74,10 @@ class BarkAuthSharedTests(BarkTestCase):
         self.assertTrue('auth_token' in data['error_detail'])
 
         data = self.post_json('/test-api-auth', auth_token=token)
+        self.assertEquals(data['status'], 'UNAUTHORISED')
+
+        self.token = token
+        data = self.auth_post_json('/test-api-auth')
         self.assertEquals(data['status'], 'OK')
 
 if __name__ == '__main__':

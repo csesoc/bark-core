@@ -20,7 +20,7 @@ class EventCreateView(BarkAuthenticatedApiEndpoint):
         group_id = json["group_id"]
         group = Group.by_id(group_id)
 
-        if user in group.members:
+        if user in group.owners:
             name = json["name"]
             description = json["description"]
             start_time = json["start_time"]
@@ -48,7 +48,7 @@ class EventView(BarkAuthenticatedApiEndpoint):
         event = Event.query.get(event_id)
         if event is not None:
             group = Group.by_id(event.group_id)
-            if user in group.members:
+            if user in group.owners:
                 return jsonify(event) 
 
         return {
