@@ -3,13 +3,13 @@ from flask import jsonify
 from bark.users.models import User
 
 group_members_associations = db.Table('group_members_associations',
-    db.Column('group_id', db.Integer, db.ForeignKey('students.id')),
-    db.Column('user_id', db.Integer, db.ForeignKey('groups.id'))
+    db.Column('group_id', db.Integer, db.ForeignKey('groups.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('students.id'))
 )
 
 group_owners_associations = db.Table('group_owners_associations',
-    db.Column('group_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('user_id', db.Integer, db.ForeignKey('groups.id'))
+    db.Column('group_id', db.Integer, db.ForeignKey('groups.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'))
 )
 
 class Group(db.Model):
