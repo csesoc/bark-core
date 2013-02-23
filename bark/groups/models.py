@@ -25,6 +25,7 @@ class Group(db.Model):
     description = db.Column(db.String)
     owners = db.relationship("User", secondary=group_owners_associations, backref='owned_groups')
     members = db.relationship("Membership")
+    events = db.relationship("Event", backref="group")
     
     def __init__(self, name, description=''):
         self.name = name

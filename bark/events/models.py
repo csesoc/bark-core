@@ -6,8 +6,7 @@ class Event(db.Model):
     __tablename__ = "events"
 
     id = db.Column(db.Integer, primary_key=True)
-
-    group = db.relationship("Group")
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id'))
 
     name = db.Column(db.Text)
     description = db.Column(db.Text)

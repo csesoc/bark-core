@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+import datetime
 
 from db_session import *
 
@@ -21,9 +22,16 @@ if args.drop:
     db.drop_all(app=app)
 db.create_all(app=app)
 if args.test_data:
-    u = User("test", "aaa")
+
+    u = User("username", "password")
     db.session.add(u)
+
     g = Group("Test Group Please Ignore", "Just a test group")
     g.add_owner(u)
     db.session.add(g)
+
+    d = datetime.datetime.now()
+    e = Event(g, 'test_event', 'description', d, d)
+    db.session.add(e)
+
     db.session.commit()
