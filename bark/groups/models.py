@@ -15,7 +15,9 @@ class Membership(db.Model):
 
     expiry = db.Column(db.DateTime, nullable=False)
     group_id = db.Column(db.Integer, db.ForeignKey('groups.id'), primary_key=True)
+    group = db.relationship("Group")
     person_id = db.Column(db.Integer, db.ForeignKey('persons.id'), primary_key=True)
+    person = db.relationship("Person")
 
     def __init__(self, group, person, expiry):
         self.group_id = group.id
@@ -29,8 +31,8 @@ class Group(db.Model):
     name = db.Column(db.String, unique=True)
     description = db.Column(db.String)
     owners = db.relationship("User", secondary=group_owners_associations, backref='owned_groups')
-    memberships = db.relationship("Membership", backref="group")
     events = db.relationship("Event", backref="group")
+    memberships = db.relationship("Membership")
     
     def __init__(self, name, description=''):
         self.name = name

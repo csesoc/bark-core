@@ -9,7 +9,7 @@ class Person(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     card_uid = db.Column(db.String(max_uid_length))
     student_number = db.Column(db.String(max_student_number_length))
-    memberships = db.relationship("Membership", backref='person')
+    memberships = db.relationship("Membership")
 
     # We need to discuss the relationship between persons
     # and Users. Github issue opened.
