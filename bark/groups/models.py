@@ -23,7 +23,7 @@ class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True)
     description = db.Column(db.String)
-    owners = db.relationship("User", secondary=group_owners_associations)
+    owners = db.relationship("User", secondary=group_owners_associations, backref='owned_groups')
     members = db.relationship("Membership")
     
     def __init__(self, name, description=''):
