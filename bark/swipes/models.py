@@ -5,15 +5,13 @@ class Swipe(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    user = db.relationship('User')
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    device_id = db.Column(db.ForeignKey("Device"))
+    device = db.relationship("Device")
 
-    event = db.relationship('Event')
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    person_id = db.Person(db.ForeignKey("Device"))
+    person = db.relationship("Person")
 
-    device = db.Column(db.String)
     timestamp = db.Column(db.DateTime)
-    uid = db.Column(db.String)
 
     def __init__(self, **kwargs):
         """
