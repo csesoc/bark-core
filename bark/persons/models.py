@@ -1,3 +1,5 @@
+from sqlalchemy.ext.associationproxy import association_proxy
+
 from bark import db
 
 max_uid_length = 16
@@ -10,6 +12,7 @@ class Person(db.Model):
     card_uid = db.Column(db.String(max_uid_length))
     student_number = db.Column(db.String(max_student_number_length))
     memberships = db.relationship("Membership")
+    groups = association_proxy("memberships", "group")
 
     # We need to discuss the relationship between persons
     # and Users. Github issue opened.

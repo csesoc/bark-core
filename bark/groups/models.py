@@ -33,6 +33,7 @@ class Group(db.Model):
     owners = db.relationship("User", secondary=group_owners_associations, backref='owned_groups')
     events = db.relationship("Event", backref="group")
     memberships = db.relationship("Membership")
+    members = association_proxy("memberships", "person")
     
     def __init__(self, name, description=''):
         self.name = name
