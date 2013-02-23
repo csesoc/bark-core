@@ -34,4 +34,7 @@ if args.test_data:
     e = Event(g, 'test_event', 'description', d, d)
     db.session.add(e)
 
+    p = Person(123456)
+    db.session.add(p)
+
     db.session.commit()
