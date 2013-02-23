@@ -8,6 +8,7 @@ from bark.groups.models import Group
 
 parser = argparse.ArgumentParser(description="Make changes to the Bark DB")
 parser.add_argument("-d", "--drop", help="Drop tables before creation", action="store_true")
+parser.add_argument("-t", "--test-data", help="Populate DB with test data", action="store_true")
 args = parser.parse_args()
 
 app = create_app()
@@ -23,8 +24,10 @@ with app.test_request_context():
     if args.drop:
         db.drop_all(app=app)
     db.create_all(app=app)
-    u = User("test", "aaa")
-    db.session.add(u)
-    g = Group("Test Group Please Ignore", [u])
-    db.session.add(g)
-    db.session.commit()
+    if args.test_data:
+        u = User("test", "aaa")
+        db.session.add(u)
+        g = Group("Test Group Please Ignore", "Just a test group")
+        g.add_owner(u)
+        db.session.add(g)
+        db.session.commit()
