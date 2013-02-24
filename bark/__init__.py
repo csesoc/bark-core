@@ -35,6 +35,9 @@ def create_app():
     from devices import bp_devices
     app.register_blueprint(bp_devices, url_prefix='/devices')
 
+    from persons import bp_persons
+    app.register_blueprint(bp_persons, url_prefix='/persons')
+
     db.init_app(app)
 
     return app

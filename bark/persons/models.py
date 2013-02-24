@@ -16,7 +16,7 @@ class Card(db.Model):
         self.card_uid = card_uid
 
     def set_person(self, person):
-        self.person_id = person.id
+        self.person = person
 
 class Person(db.Model):
     __tablename__ = "persons"
@@ -31,5 +31,5 @@ class Person(db.Model):
         json = {}
         json['id'] = self.id
         json['student_number'] = self.student_number
-        json['cards'] = [c.card_uid for c in self.cards]
+        json['card_uids'] = [c.card_uid for c in self.cards]
         return json
