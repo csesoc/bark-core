@@ -26,3 +26,10 @@ class Person(db.Model):
     memberships = db.relationship("Membership")
     groups = association_proxy("memberships", "group")
     cards = db.relationship("Card")
+
+    def to_json(self):
+        json = {}
+        json['id'] = self.id
+        json['student_number'] = self.student_number
+        json['cards'] = [c.card_uid for c in self.cards]
+        return json
