@@ -25,9 +25,9 @@ class EventView(BarkAuthenticatedApiEndpoint):
     def post(self, json):
         # User set by AuthenticatedApiEndpoint
         group_id = json["group_id"]
-        group = Group.by_id(group_id)
+        group = Group.query.get(group_id)
 
-        if user in group.owners:
+        if self.user in group.owners:
             name = json["name"]
             description = json["description"]
             start_time = json["start_time"]
