@@ -4,14 +4,16 @@ from bark import db
 from .models import Event
 from bark.auth.shared import BarkAuthenticatedApiEndpoint
 from bark.groups.models import Group
+from bark.lib import api, time
+
 
 class EventView(BarkAuthenticatedApiEndpoint):
     required_fields_ = {
         "post": [
             ("description", unicode),
             ("name",        unicode),
-            ("start_time",  int), 
-            ("end_time",    int),
+            ("start_time",  unicode), 
+            ("end_time",    unicode),
             ("group_id",    int),
         ],
     }
@@ -33,16 +35,16 @@ class EventView(BarkAuthenticatedApiEndpoint):
         if self.user in group.owners:
             name = json["name"]
             description = json["description"]
-            start_time = json["start_time"]
-            end_time = json["end_time"]
+            start_time = time.parse_time(json["start_time"])
+            end_time = time.parse_time(json["end_time"])
 
-            event = Event(group_id, name, description, start_time, end_time)
+            event = Event(group, name, description, start_time, end_time)
             db.session.add(event)
             db.session.commit()
 
             return {
                 "status": "OK",
-                "event_id": event.event_id,
+                "event_id": event.id,
             }
         else:
             return {
