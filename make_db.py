@@ -23,7 +23,7 @@ if args.drop:
 db.create_all(app=app)
 if args.test_data:
 
-    u = User("username", "password")
+    u = User("test_user", "password")
     db.session.add(u)
 
     g = Group("Test Group Please Ignore", "Just a test group")

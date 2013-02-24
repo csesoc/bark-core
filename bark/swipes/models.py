@@ -20,3 +20,11 @@ class Swipe(db.Model):
         self.device_id = device.id
         self.card_id = card.card_uid
         self.timestamp = timestamp
+
+    def to_json(self):
+        json = {}
+        json['id'] = self.id
+        json['device_id'] = self.device_id
+        json['card_uid'] = self.card_id
+        json['timestamp'] = self.timestamp.isoformat()
+        return json

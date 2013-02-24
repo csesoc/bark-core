@@ -18,3 +18,11 @@ class Device(db.Model):
         self.event_id = event.id
         self.comments = comments
         self.from_event_token = from_event_token
+
+    def to_json(self):
+        json = {}
+        json['id'] = self.id
+        json['user_id'] = self.user_id
+        json['event_id'] = self.event_id
+        json['comments'] = self.comments
+        return json

@@ -26,11 +26,14 @@ def create_app():
     from auth import bp_auth
     app.register_blueprint(bp_auth)
 
-    from swipes import bp_swipe
-    app.register_blueprint(bp_swipe, url_prefix='/swipe')
+    from swipes import bp_swipes
+    app.register_blueprint(bp_swipes, url_prefix='/swipes')
 
     from events import bp_events
-    app.register_blueprint(bp_swipe, url_prefix='/events')
+    app.register_blueprint(bp_events, url_prefix='/events')
+
+    from devices import bp_devices
+    app.register_blueprint(bp_devices, url_prefix='/devices')
 
     db.init_app(app)
 
