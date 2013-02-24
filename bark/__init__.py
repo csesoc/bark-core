@@ -30,7 +30,7 @@ def create_app():
     app.register_blueprint(bp_swipe, url_prefix='/swipe')
 
     from events import bp_events
-    app.register_blueprint(bp_swipe, url_prefix='/events')
+    app.register_blueprint(bp_events, url_prefix='/events')
 
     db.init_app(app)
 
