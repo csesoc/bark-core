@@ -7,8 +7,19 @@ import bark
 import bark.lib
 
 from bark.lib.tests import BarkTestCase
+from db_session import *
 
 class BarkAuthApiTests(BarkTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        db.drop_all()
+        db.create_all()
+
+        u = User('test', 'aaa')
+        db.session.add(u)
+        db.session.commit()
+
     def test_login_wrong_username(self):
         data = self.post_json('/login', username='wrong', password='aaa')
         self.assertEquals(data['status'], 'REQUEST_DENIED')

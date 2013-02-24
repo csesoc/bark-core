@@ -12,4 +12,4 @@ bp_groups.add_url_rule(
 bp_groups.add_url_rule(
     "/groups/<int: group_id>",
     view_func=GroupView.as_view("groups"),
-    methods=["GET, DELETE"])
+    methods=["GET"])

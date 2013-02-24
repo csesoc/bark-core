@@ -7,6 +7,12 @@ import unittest
 from bark.lib.tests import BarkTestCase
 
 class BarkSwipeCreationTests(BarkTestCase):
+
+    @classmethod
+    def setUpClass(self):
+        db.drop_all()
+        db.create_all()
+
     def setUp(self):
         BarkTestCase.setUp(self)
 

@@ -10,9 +10,12 @@ class User(db.Model):
     username = db.Column(db.String, unique=True)
     password = db.Column(db.Integer)
 
+    is_admin = db.Column(db.Boolean)
+
     def __init__(self, username, password):
         self.username = username
         self.set_password(password)
+        self.is_admin = False
 
     @classmethod
     def authenticate(cls, username, password):
