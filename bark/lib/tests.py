@@ -13,7 +13,7 @@ class BarkTestCase(unittest.TestCase):
     def setUp(self):
         self.app = bark.create_app().test_client()
 
-    def get(self, url, **kwags):
+    def get(self, url, **kwargs):
         return self.app.get(url, **kwargs)
 
     def post(self, url, **kwargs):
