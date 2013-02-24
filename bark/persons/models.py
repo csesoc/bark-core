@@ -16,7 +16,7 @@ class Card(db.Model):
         self.card_uid = card_uid
 
     def set_person(self, person):
-        self.person_id = person.id
+        self.person = person
 
 class Person(db.Model):
     __tablename__ = "persons"
@@ -26,3 +26,10 @@ class Person(db.Model):
     memberships = db.relationship("Membership")
     groups = association_proxy("memberships", "group")
     cards = db.relationship("Card")
+
+    def to_json(self):
+        json = {}
+        json['id'] = self.id
+        json['student_number'] = self.student_number
+        json['card_uids'] = [c.card_uid for c in self.cards]
+        return json
