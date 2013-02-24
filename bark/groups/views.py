@@ -28,7 +28,7 @@ class CreateGroupView(BarkAuthenticatedApiEndpoint):
             }
 
 class GroupView(BarkAuthenticatedApiEndpoint):
-    def get(self, json):
+    def get(self):
         group = Group.query.get(group_id)
         if group:
             return jsonify(group)
