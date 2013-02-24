@@ -34,7 +34,16 @@ if args.test_data:
     e = Event(g, 'test_event', 'description', d, d)
     db.session.add(e)
 
-    p = Person(123456)
+    p = Person()
     db.session.add(p)
+
+    d = Device(u, e)
+    db.session.add(d)
+
+    c = Card(1111111)
+    db.session.add(c)
+
+    s = Swipe(d, c)
+    db.session.add(s)
 
     db.session.commit()

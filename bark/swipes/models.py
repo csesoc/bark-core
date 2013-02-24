@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from bark import db
 
 class Swipe(db.Model):
@@ -5,17 +7,15 @@ class Swipe(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    device_id = db.Column(db.ForeignKey("Device"))
+    device_id = db.Column(db.ForeignKey("devices.id"))
     device = db.relationship("Device")
 
-    person_id = db.Person(db.ForeignKey("Device"))
-    person = db.relationship("Person")
+    card_id = db.Column(db.ForeignKey("cards.card_uid"))
+    card = db.relationship("Card")
 
     timestamp = db.Column(db.DateTime)
 
-    def __init__(self, **kwargs):
-        """
-        Put in here for safety: *must* call super.__init__
-        """
-
-        super(Swipe, self).__init__(**kwargs)
+    def __init__(self, device, card, timestamp=datetime.now()):
+        self.device_id = device.id
+        self.card_id = card.card_uid
+        self.timestamp = timestamp
