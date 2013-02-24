@@ -1,14 +1,14 @@
 __all__ = [
-    "bp_swipe",
+    "bp_swipes",
 ]
 
 from flask import Blueprint
 
 from .views import SwipeView
 
-bp_swipe = Blueprint("bp_swipe", __name__)
+bp_swipes = Blueprint("bp_swipes", __name__)
 
-bp_swipe.add_url_rule(
-    "/",
+bp_swipes.add_url_rule(
+    "",
     view_func=SwipeView.as_view("swipe"),
     methods=["POST"])

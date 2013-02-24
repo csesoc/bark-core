@@ -33,10 +33,16 @@ class BarkTestCase(unittest.TestCase):
         kwargs['headers'].append(('auth_token', self.token))
         return self.post(url, **kwargs)
 
+    def get_json(self, url):
+        return json.loads(self.get(url).data)
+
     def post_json(self, url, **kwargs):
         # JSON passed as kwargs, slightly messy
         response = self.post(url, data=json.dumps(kwargs), content_type='application/json')
         return json.loads(response.data)
+
+    def auth_get_json(self, url):
+        return json.loads(self.auth_get(url).data)
 
     def auth_post_json(self, url, **kwargs):
         # Conflict between two different kwargs needs. Dayum.

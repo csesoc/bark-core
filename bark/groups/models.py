@@ -32,7 +32,7 @@ class Group(db.Model):
     name = db.Column(db.String, unique=True)
     description = db.Column(db.String)
     owners = db.relationship("User", secondary=group_owners_associations, backref='owned_groups')
-    events = db.relationship("Event", backref="group")
+    events = db.relationship("Event",)
     memberships = db.relationship("Membership")
     members = association_proxy("memberships", "person")
     

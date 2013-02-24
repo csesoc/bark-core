@@ -4,7 +4,7 @@ from bark import db
 from .models import Event
 from bark.auth.shared import BarkAuthenticatedApiEndpoint
 
-class EventCreateView(BarkAuthenticatedApiEndpoint):
+class EventView(BarkAuthenticatedApiEndpoint):
     required_fields_ = {
         "post": [
             ("description", unicode),
@@ -14,6 +14,12 @@ class EventCreateView(BarkAuthenticatedApiEndpoint):
             ("group_id",    int),
         ],
     }
+
+    def get(self, json):
+        owned_group_ids = [g.id for g in self.user.owned_groups]
+        events = Event.query.filter(Event.group_id.in_(owned_group_ids))
+        events_json = [e.to_json() for e in events.all()]
+        return {'events': events_json}
 
     def post(self, json):
         # User set by AuthenticatedApiEndpoint
@@ -40,7 +46,7 @@ class EventCreateView(BarkAuthenticatedApiEndpoint):
                 "error_detail": "User not member of group",
             }
             
-class EventView(BarkAuthenticatedApiEndpoint):
+class SingleEventView(BarkAuthenticatedApiEndpoint):
     # event_id is global by url rules
     # user is supplied by AuthenticatedApiEndpoint
 
