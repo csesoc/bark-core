@@ -4,14 +4,16 @@ from bark import db
 from .models import Event
 from bark.auth.shared import BarkAuthenticatedApiEndpoint
 from bark.groups.models import Group
+from bark.lib import api, time
+
 
 class EventView(BarkAuthenticatedApiEndpoint):
     required_fields_ = {
         "post": [
             ("description", unicode),
             ("name",        unicode),
-            ("start_time",  int), 
-            ("end_time",    int),
+            ("start_time",  unicode), 
+            ("end_time",    unicode),
             ("group_id",    int),
         ],
     }
@@ -20,7 +22,10 @@ class EventView(BarkAuthenticatedApiEndpoint):
         owned_group_ids = [g.id for g in self.user.owned_groups]
         events = Event.query.filter(Event.group_id.in_(owned_group_ids))
         events_json = [e.to_json() for e in events.all()]
-        return {'events': events_json}
+        return {
+            "status": "OK",
+            'events': events_json
+        }
 
     def post(self, json):
         # User set by AuthenticatedApiEndpoint
@@ -30,16 +35,16 @@ class EventView(BarkAuthenticatedApiEndpoint):
         if self.user in group.owners:
             name = json["name"]
             description = json["description"]
-            start_time = json["start_time"]
-            end_time = json["end_time"]
+            start_time = time.parse_time(json["start_time"])
+            end_time = time.parse_time(json["end_time"])
 
-            event = Event(group_id, name, description, start_time, end_time)
+            event = Event(group, name, description, start_time, end_time)
             db.session.add(event)
             db.session.commit()
 
             return {
                 "status": "OK",
-                "event_id": event.event_id,
+                "event_id": event.id,
             }
         else:
             return {
@@ -54,18 +59,21 @@ class SingleEventView(BarkAuthenticatedApiEndpoint):
         if event is not None:
             group = Group.query.get(event.group_id)
             if group and self.user in group.owners:
-                return event.to_json()
+                return {
+                    "status": "OK",
+                    "event": event.to_json(),
+                }
 
         return {
             "status": "RESOURCE_ERROR",
             "error_detail": "The requested event could not be found",
         }
         
-    def delete(self, json):
+    def delete(self, event_id=None):
         event = Event.query.get(event_id)
         if event:
-            group = Group.by_id(event.group_id)
-            if user in group.owners:
+            group = Group.query.get(event.group_id)
+            if self.user in group.owners:
                 db.session.delete(event)
                 db.session.commit()
 
