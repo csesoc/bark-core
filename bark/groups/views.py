@@ -36,7 +36,7 @@ class GroupView(BarkAuthenticatedApiEndpoint):
     def get(self):
         group = Group.query.get(group_id)
         if group and self.user in group.owners:
-            return jsonify(group)
+            return group.to_json()
         else:
             return {
                 "status": "RESOURCE_ERROR",
