@@ -20,7 +20,10 @@ class EventView(BarkAuthenticatedApiEndpoint):
         owned_group_ids = [g.id for g in self.user.owned_groups]
         events = Event.query.filter(Event.group_id.in_(owned_group_ids))
         events_json = [e.to_json() for e in events.all()]
-        return {'events': events_json}
+        return {
+            "status": "OK",
+            'events': events_json
+        }
 
     def post(self, json):
         # User set by AuthenticatedApiEndpoint
@@ -54,7 +57,10 @@ class SingleEventView(BarkAuthenticatedApiEndpoint):
         if event is not None:
             group = Group.query.get(event.group_id)
             if group and self.user in group.owners:
-                return event.to_json()
+                return {
+                    "status": "OK",
+                    "event": event.to_json(),
+                }
 
         return {
             "status": "RESOURCE_ERROR",
