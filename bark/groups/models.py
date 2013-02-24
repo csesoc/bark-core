@@ -1,9 +1,9 @@
+import datetime
+
 from bark import db
 from flask import jsonify
 from bark.users.models import User
 from sqlalchemy.ext.associationproxy import association_proxy
-
-
 
 group_owners_associations = db.Table('group_owners_associations',
     db.Column('group_id', db.Integer, db.ForeignKey('groups.id')),
@@ -13,14 +13,16 @@ group_owners_associations = db.Table('group_owners_associations',
 class Membership(db.Model):
     __tablename__ = 'group_members_associations'
 
-    id = db.Column('id', db.Integer, primary_key=True),
-    student_id = db.Column(db.Integer, db.ForeignKey('students.id')),
-    group_id = db.Column(db.Integer, db.ForeignKey('groups.id')),
-    expiry = db.Column(db.DateTime, nullable=False),
+    expiry = db.Column(db.DateTime, nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id'), primary_key=True)
+    group = db.relationship("Group")
+    person_id = db.Column(db.Integer, db.ForeignKey('persons.id'), primary_key=True)
+    person = db.relationship("Person")
 
-    group = db.relationship(Group, backref="memberships")
-    student = db.relationship(Student, backref="memberships")
-
+    def __init__(self, group, person, expiry):
+        self.group_id = group.id
+        self.person_id = person.id
+        self.expiry = expiry
 
 class Group(db.Model):
     __tablename__ = "groups"
@@ -28,16 +30,19 @@ class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True)
     description = db.Column(db.String)
-    members = association_proxy("memberships", "students")
-    owners = db.relationship("User", secondary=group_owners_associations)
+    owners = db.relationship("User", secondary=group_owners_associations, backref='owned_groups')
+    events = db.relationship("Event", backref="group")
+    memberships = db.relationship("Membership")
+    members = association_proxy("memberships", "person")
     
-    def __init__(self, name, owner, description=''):
+    def __init__(self, name, description=''):
         self.name = name
         self.description = description
-        self.owners.append(owner)
         
-    def add_member(self, student):
-        self.members.append(student)
+    def add_member(self, person, membership_length=365):
+        expiry = datetime.datetime.today() + datetime.timedelta(days=membership_length)
+        m = Membership(self, person, expiry)
+        self.memberships.append(m)
 
     def add_owner(self, user):
         self.owners.append(user)
