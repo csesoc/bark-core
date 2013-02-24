@@ -3,6 +3,7 @@ from flask import jsonify
 from bark import db
 from .models import Event
 from bark.auth.shared import BarkAuthenticatedApiEndpoint
+from bark.groups.models import Group
 
 class EventView(BarkAuthenticatedApiEndpoint):
     required_fields_ = {
@@ -15,7 +16,7 @@ class EventView(BarkAuthenticatedApiEndpoint):
         ],
     }
 
-    def get(self, json):
+    def get(self):
         owned_group_ids = [g.id for g in self.user.owned_groups]
         events = Event.query.filter(Event.group_id.in_(owned_group_ids))
         events_json = [e.to_json() for e in events.all()]
@@ -47,15 +48,13 @@ class EventView(BarkAuthenticatedApiEndpoint):
             }
             
 class SingleEventView(BarkAuthenticatedApiEndpoint):
-    # event_id is global by url rules
-    # user is supplied by AuthenticatedApiEndpoint
 
-    def get(self, json):
+    def get(self, event_id=None):
         event = Event.query.get(event_id)
         if event is not None:
-            group = Group.by_id(event.group_id)
-            if user in group.owners:
-                return jsonify(event) 
+            group = Group.query.get(event.group_id)
+            if group and self.user in group.owners:
+                return event.to_json()
 
         return {
             "status": "RESOURCE_ERROR",

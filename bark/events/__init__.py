@@ -6,7 +6,7 @@ bp_events = Blueprint("bp_events", __name__)
 
 bp_events.add_url_rule(
     "/<int:event_id>",
-    view_func=SingleEventView.as_view("events"),
+    view_func=SingleEventView.as_view("single_events"),
     methods=["GET", "DELETE"])
 
 bp_events.add_url_rule(
