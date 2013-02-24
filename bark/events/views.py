@@ -69,11 +69,11 @@ class SingleEventView(BarkAuthenticatedApiEndpoint):
             "error_detail": "The requested event could not be found",
         }
         
-    def delete(self, json):
+    def delete(self, event_id=None):
         event = Event.query.get(event_id)
         if event:
-            group = Group.by_id(event.group_id)
-            if user in group.owners:
+            group = Group.query.get(event.group_id)
+            if self.user in group.owners:
                 db.session.delete(event)
                 db.session.commit()
 
