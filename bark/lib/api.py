@@ -30,7 +30,7 @@ class VerificationException(BarkApiException):
     def status(self): return "BAD_REQUEST"
 
 class BarkApiEndpoint(View):
-    def dispatch_request(self):
+    def dispatch_request(self, **kwargs):
         """
         Dispatches incoming request.
         This method is called by Flask itself.
@@ -40,7 +40,10 @@ class BarkApiEndpoint(View):
             self.method = request.method.lower()
             self.verify_request(request)
 
-            response = getattr(self, self.method)(request.json)
+            if self.method == 'post' or self.method == 'put':
+                response = getattr(self, self.method)(request.json, **kwargs)
+            else:
+                response = getattr(self, self.method)(**kwargs)
 
         except BarkApiException, e:
             response = e.describe()
