@@ -3,6 +3,7 @@ import datetime
 from bark import db
 from flask import jsonify
 from bark.users.models import User
+from bark.persons.models import Person
 from sqlalchemy.ext.associationproxy import association_proxy
 
 group_owners_associations = db.Table('group_owners_associations',

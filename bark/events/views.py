@@ -53,7 +53,7 @@ class EventView(BarkAuthenticatedApiEndpoint):
 
         return {
             "status": "RESOURCE_ERROR",
-            "error": "The requested event could not be found",
+            "error_detail": "The requested event could not be found",
         }
         
     def delete(self, json):
@@ -70,5 +70,5 @@ class EventView(BarkAuthenticatedApiEndpoint):
 
         return {
             "status": "RESOURCE_ERROR",
-            "error": "The requested event could not be found",
+            "error_detail": "The requested event could not be found",
         }

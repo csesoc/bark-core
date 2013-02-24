@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from bark import db
+from bark.devices.models import Device
 
 class Swipe(db.Model):
     __tablename__ = 'swipes'
