@@ -1,5 +1,6 @@
 from bark import db
 from bark.groups.models import Group
+from sqlalchemy.ext.associationproxy import association_proxy
 
 class Event(db.Model):
     __tablename__ = "events"
@@ -13,6 +14,9 @@ class Event(db.Model):
 
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
+
+    devices = db.relationship("Device")
+    swipes = association_proxy("devices", "swipes")
 
     def __init__(self, group, name, description, start_time, end_time):
         self.group = group
