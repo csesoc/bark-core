@@ -3,7 +3,7 @@ from bark import db
 from bark.auth.shared import BarkAuthenticatedApiEndpoint
 from .models import Group
 
-class CreateGroupView(BarkAuthenticatedApiEndpoint):
+class GroupView(BarkAuthenticatedApiEndpoint):
     required_fields = {
        "post": [
             ("name", str),
@@ -32,7 +32,15 @@ class CreateGroupView(BarkAuthenticatedApiEndpoint):
             "status": "REFUSED"
         }
 
-class GroupView(BarkAuthenticatedApiEndpoint):
+    def get(self):
+        groups_json = [g.to_json() for g in self.user.owned_groups]
+        return {
+            "status": "OK",
+            "groups": groups_json,
+        }
+        
+
+class SingleGroupView(BarkAuthenticatedApiEndpoint):
     def get(self):
         group = Group.query.get(group_id)
         if group and self.user in group.owners:
