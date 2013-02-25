@@ -41,7 +41,7 @@ class GroupView(BarkAuthenticatedApiEndpoint):
         
 
 class SingleGroupView(BarkAuthenticatedApiEndpoint):
-    def get(self):
+    def get(self, group_id=None):
         group = Group.query.get(group_id)
         if group and self.user in group.owners:
             return group.to_json()
