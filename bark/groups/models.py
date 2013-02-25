@@ -53,8 +53,8 @@ class Group(db.Model):
         json['id'] = self.id
         json['name'] = self.name
         json['description'] = self.description
-        json['owners'] = [o.username for o in self.owners]
-        json['events'] = [e.id for e in self.events]
+        json['owners'] = [o.to_json() for o in self.owners]
+        json['events'] = [e.to_json() for e in self.events]
         json['members'] = [p.to_json() for p in self.members]
         return json
 

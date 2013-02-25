@@ -35,3 +35,10 @@ class User(db.Model):
 
     def check_password(self, password):
         return self.password is not None and bcrypt.hashpw(password, self.password) == self.password
+
+    def to_json(self):
+        json = {}
+        json['id'] = self.id
+        json['username'] = self.username
+        json['is_admin'] = self.is_admin
+        return json
