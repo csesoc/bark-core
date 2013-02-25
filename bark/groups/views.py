@@ -24,7 +24,7 @@ class GroupView(BarkAuthenticatedApiEndpoint):
                     }
 
             return {
-                "status": "ok", 
+                "status": "OK", 
                 "group": group.to_json(),
                 }
 
@@ -44,9 +44,11 @@ class SingleGroupView(BarkAuthenticatedApiEndpoint):
     def get(self, group_id=None):
         group = Group.query.get(group_id)
         if group and self.user in group.owners:
-            return group.to_json()
-        else:
             return {
-                "status": "RESOURCE_ERROR",
-                "error": "Group does not exist",
-            }
+                "status": "OK", 
+                "group": group.to_json(),
+                }
+        return {
+            "status": "RESOURCE_ERROR",
+            "error": "Group does not exist",
+        }
