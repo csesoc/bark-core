@@ -1,6 +1,5 @@
 from bark import db
 from bark.auth.shared import BarkAuthenticatedApiEndpoint
-from bark.groups.models import Group
 
 from .models import *
 
