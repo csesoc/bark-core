@@ -13,3 +13,8 @@ bp_events.add_url_rule(
     "",
     view_func=EventView.as_view("events"),
     methods=["POST", "GET"])
+
+bp_events.add_url_rule(
+    "/<int:event_id>/swipes",
+    view_func=EventInfoView.as_view("single_event_swipes"),
+    methods=["GET"])

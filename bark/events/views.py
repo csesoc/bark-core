@@ -85,3 +85,20 @@ class SingleEventView(BarkAuthenticatedApiEndpoint):
             "status": "RESOURCE_ERROR",
             "error_detail": "The requested event could not be found",
         }
+
+class EventInfoView(BarkAuthenticatedApiEndpoint):
+    def get(self, event_id=None):
+        event = Event.query.get(event_id)
+        if event is not None:
+            group = Group.query.get(event.group_id)
+            if group and self.user in group.owners:
+                return {
+                    "status": "OK",
+                    "event": event.to_json(),
+                    "swipes": [s.to_json for s in d for d in event.swipes]
+                }
+
+        return {
+            "status": "RESOURCE_ERROR",
+            "error_detail": "The requested event could not be found",
+        }

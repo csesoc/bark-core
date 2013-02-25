@@ -13,6 +13,8 @@ class Device(db.Model):
     comments = db.Column(db.Text)
     from_event_token = db.Column(db.Boolean)
 
+    swipes = db.relationship("Swipe")
+
     def __init__(self, user, event, comments='', from_event_token=False):
         self.user_id = user.id
         self.event_id = event.id
