@@ -38,6 +38,9 @@ def create_app():
     from persons import bp_persons
     app.register_blueprint(bp_persons, url_prefix='/persons')
 
+    from groups import bp_groups
+    app.register_blueprint(bp_groups, url_prefix='/groups')
+
     db.init_app(app)
 
     return app
