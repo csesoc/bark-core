@@ -4,8 +4,7 @@ from bark import db
 from .models import Event
 from bark.auth.shared import BarkAuthenticatedApiEndpoint
 from bark.groups.models import Group
-from bark.lib import api, time
-
+from bark.lib import time
 
 class EventView(BarkAuthenticatedApiEndpoint):
     required_fields_ = {
