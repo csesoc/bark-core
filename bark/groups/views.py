@@ -18,37 +18,35 @@ class GroupView(BarkAuthenticatedApiEndpoint):
                 db.session.add(group)
                 db.session.commit()
             except db.IntegrityError:
-                return {
-                    "status": "REQUEST_DENIED",
-                    "error": "A group with that name already exists",
-                    }
+                return api.json_error(
+                    "REQUEST_DENIED",
+                    "A group with that name already exists"
+                    )
 
-            return {
-                "status": "OK", 
-                "group": group.to_json(),
-                }
+            return api.json_ok({
+                "group": group.to_json()
+                })
 
-        return {
-            "status": "REFUSED"
-        }
+        return api.json_error(
+                    "UNAUTHORISED",
+                    "You are not admin"
+            )
 
     def get(self):
         groups_json = [g.to_json() for g in self.user.owned_groups]
-        return {
-            "status": "OK",
-            "groups": groups_json,
-        }
+        return api.json_ok({
+            "groups": groups_json
+        })
         
 
 class SingleGroupView(BarkAuthenticatedApiEndpoint):
     def get(self, group_id=None):
         group = Group.query.get(group_id)
         if group and self.user in group.owners:
-            return {
-                "status": "OK", 
+            return api.json_ok({
                 "group": group.to_json(),
-                }
-        return {
-            "status": "RESOURCE_ERROR",
-            "error": "Group does not exist",
-        }
+                })
+        return api.json_error(
+            "RESOURCE_ERROR",
+            "Group does not exist"
+        )
