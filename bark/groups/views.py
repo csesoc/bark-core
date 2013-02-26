@@ -2,6 +2,7 @@ from flask import jsonify
 from bark import db
 from bark.auth.shared import BarkAuthenticatedApiEndpoint
 from .models import Group
+from bark.lib import api
 
 class GroupView(BarkAuthenticatedApiEndpoint):
     required_fields = {
