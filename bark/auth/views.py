@@ -1,5 +1,5 @@
 from bark import db
-from bark.lib.api import BarkApiEndpoint
+from bark.lib.endpoint import BarkApiEndpoint
 from bark.users import User
 
 from .models import Session

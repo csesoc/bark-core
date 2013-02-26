@@ -1,6 +1,6 @@
 from flask import jsonify
 
-from bark.lib.api import BarkApiEndpoint, BarkApiException
+from bark.lib.endpoint import BarkApiEndpoint, BarkApiException
 from .models import Session
 
 class AuthenticationException(BarkApiException):

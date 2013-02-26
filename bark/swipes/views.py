@@ -1,6 +1,6 @@
 from bark import db
 from bark.auth.shared import BarkAuthenticatedApiEndpoint
-from bark.lib import api, time
+from bark.lib import time
 from bark.persons.models import Card, Person
 from bark.events.models import Event
 from bark.devices.models import Device
