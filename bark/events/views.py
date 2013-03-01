@@ -84,9 +84,10 @@ class EventInfoView(BarkAuthenticatedApiEndpoint):
         if event is not None:
             group = Group.query.get(event.group_id)
             if group and self.user in group.owners:
+                swipes_json = [s.to_json() for s in event.swipes]
                 return api.json_ok({
                     "event": event.to_json(),
-                    "swipes": [s.to_json() for s in event.swipes]
+                    "swipes": swipes_json
                 })
 
         return api.json_error(
