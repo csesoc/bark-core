@@ -15,7 +15,7 @@ class Event(db.Model):
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
 
-    devices = db.relationship("Device", backref="event")
+    devices = db.relationship("Device")
     swipes = association_proxy("devices", "swipes")
 
     def __init__(self, group, name, description, start_time, end_time):
