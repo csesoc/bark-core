@@ -9,7 +9,7 @@ class Swipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     device_id = db.Column(db.ForeignKey("devices.id"))
-    device = db.relationship("Device", backref="swipe")
+    device = db.relationship("Device")
 
     card_id = db.Column(db.ForeignKey("cards.card_uid"))
     card = db.relationship("Card")

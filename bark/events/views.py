@@ -87,7 +87,7 @@ class EventInfoView(BarkAuthenticatedApiEndpoint):
                 swipes_json = [s.to_json() for s in d for d in event.swipes]
                 return api.json_ok({
                     "event": event.to_json(),
-                    "swipes": swipes_json
+                    "swipes": event.swipes
                 })
 
         return api.json_error(
