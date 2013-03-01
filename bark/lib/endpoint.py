@@ -99,4 +99,8 @@ class BarkApiEndpoint(View):
                 raise VerificationException("Missing field %r" % field)
 
             if type(json[field]) != field_type:
-                raise VerificationException("Non-conformant field %r" % field)
+                if type(json[field]) == str and field_type == unicode:
+                    # Hacky hack for Python < 2.7.3 json unicode handling
+                    json[field] = unicode(json[field])
+                else:
+                    raise VerificationException("Non-conformant field %r" % field)
