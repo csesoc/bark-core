@@ -41,6 +41,10 @@ def create_app():
     from groups import bp_groups
     app.register_blueprint(bp_groups, url_prefix='/groups')
 
+    @app.route('/') 
+    def hello():
+        return "Hello World"
+    
     db.init_app(app)
 
     return app
