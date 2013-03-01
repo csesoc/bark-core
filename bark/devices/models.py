@@ -8,12 +8,12 @@ class Device(db.Model):
     user = db.relationship("User")
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
-    event = db.relationship("Event")
+    event = db.relationship("Event", backref="device")
 
     comments = db.Column(db.Text)
     from_event_token = db.Column(db.Boolean)
 
-    swipes = db.relationship("Swipe")
+    swipes = db.relationship("Swipe", backref="device")
 
     def __init__(self, user, event, comments='', from_event_token=False):
         self.user_id = user.id
