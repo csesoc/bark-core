@@ -18,6 +18,9 @@ class Card(db.Model):
     def set_person(self, person):
         self.person = person
 
+    def to_json(self):
+        return self.person.to_json()
+
 class Person(db.Model):
     __tablename__ = "persons"
 
