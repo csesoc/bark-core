@@ -5,6 +5,11 @@ from .views import *
 bp_groups = Blueprint("bp_groups", __name__)
 
 bp_groups.add_url_rule(
+    "/<int:group_id>/card_uids",
+    view_func=GroupCardUidsView.as_view("group_card_uids"),
+    methods=["GET"])
+
+bp_groups.add_url_rule(
     "/<int:group_id>",
     view_func=SingleGroupView.as_view("single_groups"),
     methods=["GET"])

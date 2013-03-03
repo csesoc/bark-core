@@ -58,3 +58,6 @@ class Group(db.Model):
         json['members'] = [p.to_json() for p in self.members]
         return json
 
+    def get_member_card_uids(self):
+        return [c.card_uid for m in self.members for c in m.cards]
+

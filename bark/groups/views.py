@@ -51,3 +51,16 @@ class SingleGroupView(BarkAuthenticatedApiEndpoint):
             "RESOURCE_ERROR",
             "Group does not exist"
         )
+
+class GroupCardUidsView(BarkAuthenticatedApiEndpoint):
+    def get(self, group_id=None):
+        group = Group.query.get(group_id)
+        if group and self.user in group.owners:
+            return api.json_ok({
+                "card_uids": group.get_member_card_uids(),
+                })
+        return api.json_error(
+            "RESOURCE_ERROR",
+            "Group does not exist"
+        )
+    
