@@ -33,6 +33,7 @@ class SwipeView(BarkAuthenticatedApiEndpoint):
                     db.session.add(card)
                     card.set_person(person)
 
+                event.group.add_member(card.person)
                 swipe = Swipe(device, card, json['timestamp'])
                 db.session.add(swipe)
                 db.session.commit()
