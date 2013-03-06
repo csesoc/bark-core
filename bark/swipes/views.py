@@ -35,7 +35,10 @@ class SwipeView(BarkAuthenticatedApiEndpoint):
                 
                 if card.person not in event.group.members:
                     event.group.add_member(card.person)
-                swipe = Swipe(device, card, json['timestamp'])
+                
+                event_cards = [s.card for l in event.swipes for s in l]
+                if card not in event_cards:
+                    swipe = Swipe(device, card, json['timestamp'])
                 db.session.add(swipe)
                 db.session.commit()
 
