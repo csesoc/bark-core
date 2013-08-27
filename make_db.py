@@ -29,6 +29,9 @@ if args.test_data:
     g = Group("Test Group Please Ignore", "Just a test group")
     g.add_owner(u)
     db.session.add(g)
+    g = Group("TEST GROUP 2", "sfdgdsfg")
+    g.add_owner(u)
+    db.session.add(g)
 
     d = datetime.datetime.now()
     e = Event(g, 'test_event', 'description', d, d)

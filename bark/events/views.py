@@ -14,6 +14,7 @@ class EventView(BarkAuthenticatedApiEndpoint):
             ("start_time",  unicode), 
             ("end_time",    unicode),
             ("group_id",    int),
+            ("event_id",    int),
         ],
     }
 
@@ -29,19 +30,28 @@ class EventView(BarkAuthenticatedApiEndpoint):
         # User set by AuthenticatedApiEndpoint
         group_id = json["group_id"]
         group = Group.query.get(group_id)
-
         if self.user in group.owners:
             name = json["name"]
             description = json["description"]
-            start_time = time.parse_time(json["start_time"])
-            end_time = time.parse_time(json["end_time"])
-
-            event = Event(group, name, description, start_time, end_time)
-            db.session.add(event)
-            db.session.commit()
+            start_time = time.parse_time(json["start_time"]).replace(tzinfo=None)  
+            end_time = time.parse_time(json["end_time"]).replace(tzinfo=None)  
+            if json["event_id"] == 0:
+                print "ADD EVENT"
+                event = Event(group, name, description, start_time, end_time)
+                db.session.add(event)
+                db.session.commit()
+            else:
+                event = Event.query.get(int(json["event_id"]))
+                event.name = name
+                event.description = description
+                event.start_time = start_time
+                event.end_time = end_time
+                event.group_id = group_id
+                event.group = group
+                db.session.commit()
 
             return api.json_ok({
-                "event_id": event.id
+                "event_id": event.id,
             })
         else:
             return api.json_error(
